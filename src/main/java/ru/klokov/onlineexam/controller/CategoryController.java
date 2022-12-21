@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.klokov.onlineexam.dto.PagedResponse;
@@ -69,6 +70,20 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
         CategoryResponse response = mapper.map(categoryService.createCategory(
                 mapper.map(categoryRequest, Category.class)), CategoryResponse.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<CategoryResponse> editCategory(@RequestBody @Valid CategoryRequest categoryRequest,
+                                                         @PathVariable("id") Long id) {
+        Category newCategory = mapper.map(categoryRequest, Category.class);
+        CategoryResponse response = mapper.map(categoryService.editCategory(newCategory, id), CategoryResponse.class);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) {
+        categoryService.deleteCategoryById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -11,4 +11,6 @@ public interface CategoryService {
     Page<Category> getAllCategoriesPaginated(Integer pageNumber, Integer pageSize, String sortField, String sortDirection);
     Category getCategoryById(Long id);
     Category createCategory(Category category);
+    Category editCategory(Category newCategory, Long categoryToUpdateId);
+    void deleteCategoryById(Long id);
 }

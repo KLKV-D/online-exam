@@ -40,4 +40,23 @@ public class CategoryServiceImpl implements CategoryService {
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
     }
+
+    @Override
+    public Category editCategory(Category newCategory, Long categoryToUpdateId) {
+        Category categoryToUpdate = categoryRepository.findById(categoryToUpdateId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID = " + categoryToUpdateId));
+
+        categoryToUpdate.setName(newCategory.getName());
+        categoryToUpdate.setDescription(newCategory.getDescription());
+        // TODO set subcategories
+
+        return categoryRepository.save(categoryToUpdate);
+    }
+
+    @Override
+    public void deleteCategoryById(Long id) {
+        categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID = " + id));
+        categoryRepository.deleteById(id);
+    }
 }
