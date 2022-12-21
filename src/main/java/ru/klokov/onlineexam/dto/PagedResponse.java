@@ -18,4 +18,5 @@ public class PagedResponse<T> {
     private Long totalElements;
     private String sortField;
     private String sortDirection;
+    private String reverseSortDirection;
 }

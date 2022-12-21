@@ -9,5 +9,6 @@ import java.util.List;
 public interface CategoryService {
     List<Category> getAllCategories();
     Page<Category> getAllCategoriesPaginated(Integer pageNumber, Integer pageSize, String sortField, String sortDirection);
+    Category getCategoryById(Long id);
     Category createCategory(Category category);
 }

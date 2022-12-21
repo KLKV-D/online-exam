@@ -44,6 +44,8 @@ public class CategoryController {
         List<CategoryResponse> categoryResponseList = page.getContent().stream()
                 .map(category -> mapper.map(category, CategoryResponse.class)).toList();
 
+        String reverseSortDirection = sortDirection.equals("asc") ? "desc" : "asc";
+
         PagedResponse<CategoryResponse> response = new PagedResponse<>(
                 categoryResponseList,
                 page.getNumber(),
@@ -51,10 +53,16 @@ public class CategoryController {
                 page.getTotalPages(),
                 page.getTotalElements(),
                 sortField,
-                sortDirection
+                sortDirection,
+                reverseSortDirection
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(mapper.map(categoryService.getCategoryById(id), CategoryResponse.class));
     }
 
     @PostMapping

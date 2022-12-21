@@ -14,7 +14,7 @@ public class CategoryRequest {
     @NotBlank(message = "Category name must be not null and not empty")
     @Size(min = 2, max = 100, message = "Category name length must me between 2 and 100")
     private String name;
-    @Max(100)
+    @Size(max = 1000, message = "Category description length must be less then 1000")
     private String description;
 
     public CategoryRequest(String name) {
