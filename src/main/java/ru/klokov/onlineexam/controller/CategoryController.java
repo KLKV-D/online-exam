@@ -1,5 +1,6 @@
 package ru.klokov.onlineexam.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.klokov.onlineexam.dto.PagedResponse;
+import ru.klokov.onlineexam.dto.category.CategoryRequest;
 import ru.klokov.onlineexam.dto.category.CategoryResponse;
 import ru.klokov.onlineexam.model.Category;
 import ru.klokov.onlineexam.service.CategoryService;
@@ -52,6 +54,13 @@ public class CategoryController {
                 sortDirection
         );
 
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
+        CategoryResponse response = mapper.map(categoryService.createCategory(
+                mapper.map(categoryRequest, Category.class)), CategoryResponse.class);
         return ResponseEntity.ok(response);
     }
 }

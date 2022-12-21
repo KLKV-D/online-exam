@@ -28,4 +28,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryRepository.findAll(pageable);
     }
+
+    @Override
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
+    }
 }
