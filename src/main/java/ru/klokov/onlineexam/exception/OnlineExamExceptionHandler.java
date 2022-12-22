@@ -8,13 +8,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class OnlineExamExceptionHandler {
@@ -26,16 +24,6 @@ public class OnlineExamExceptionHandler {
                 messages.computeIfAbsent(((FieldError) objectError).getField(), k -> new ArrayList<>()).add(objectError.getDefaultMessage());
         }
 
-//        for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-//            String fieldName = ((FieldError) error).getField();
-//            List<String> errors = messages.get(fieldName);
-//            if (errors == null) {
-//                errors = new ArrayList<>();
-//                messages.put(fieldName, errors);
-//            }
-//            errors.add(error.getDefaultMessage());
-//        }
-
         ValidationExceptionResponse validationExceptionResponse = new ValidationExceptionResponse(
                 messages,
                 LocalDateTime.now()
@@ -44,7 +32,7 @@ public class OnlineExamExceptionHandler {
         return new ResponseEntity<>(validationExceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ResourceNotFoundException.class, ResourceAlreadyExistsException.class})
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<CustomExceptionResponse> handleResourceNotFoundException(Exception ex) {
         CustomExceptionResponse customExceptionResponse = new CustomExceptionResponse(
                 ex.getMessage(),
@@ -52,5 +40,15 @@ public class OnlineExamExceptionHandler {
         );
 
         return new ResponseEntity<>(customExceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<CustomExceptionResponse> handleResourceAlreadyExistsException(Exception ex) {
+        CustomExceptionResponse customExceptionResponse = new CustomExceptionResponse(
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(customExceptionResponse, HttpStatus.CONFLICT);
     }
 }
