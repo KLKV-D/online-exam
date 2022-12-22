@@ -3,25 +3,26 @@ package ru.klokov.onlineexam.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "categories")
+@Table(name = "subcategories")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category extends BaseEntity {
+public class Subcategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<Subcategory> subcategories = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // TODO tests relation
 }
