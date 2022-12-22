@@ -18,6 +18,7 @@ public class AuditingConfig {
     private static class AuditorAwareImpl implements AuditorAware<String> {
         @Override
         public Optional<String> getCurrentAuditor() {
+            // TODO authentication auditing with spring security
 //            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //
 //            if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
