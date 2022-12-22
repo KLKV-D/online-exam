@@ -13,4 +13,5 @@ public interface CategoryService {
     Category createCategory(Category category);
     Category editCategory(Category newCategory, Long categoryToUpdateId);
     void deleteCategoryById(Long id);
+    Boolean categoryAlreadyExists(Category category);
 }

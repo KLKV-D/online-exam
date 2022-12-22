@@ -1,16 +1,16 @@
 package ru.klokov.onlineexam.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import ru.klokov.onlineexam.exception.ResourceAlreadyExistsException;
 import ru.klokov.onlineexam.exception.ResourceNotFoundException;
 import ru.klokov.onlineexam.model.Category;
 import ru.klokov.onlineexam.repository.CategoryRepository;
 
 import java.util.List;
+
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 @Service
 @RequiredArgsConstructor
@@ -38,11 +38,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
+        if (categoryAlreadyExists(category))
+            throw new ResourceAlreadyExistsException("Category with name " + category.getName() + " already exists!");
         return categoryRepository.save(category);
     }
 
     @Override
     public Category editCategory(Category newCategory, Long categoryToUpdateId) {
+        if (categoryAlreadyExists(newCategory))
+            throw new ResourceAlreadyExistsException("Category with name " + newCategory.getName() + " already exists!");
+
         Category categoryToUpdate = categoryRepository.findById(categoryToUpdateId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID = " + categoryToUpdateId));
 
@@ -58,5 +63,14 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID = " + id));
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean categoryAlreadyExists(Category category) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withMatcher("name", ignoreCase());
+        Example<Category> example = Example.of(category, matcher);
+        return categoryRepository.exists(example);
     }
 }
