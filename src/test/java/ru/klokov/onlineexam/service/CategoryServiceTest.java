@@ -15,6 +15,7 @@ import ru.klokov.onlineexam.exception.ResourceAlreadyExistsException;
 import ru.klokov.onlineexam.exception.ResourceNotFoundException;
 import ru.klokov.onlineexam.model.Category;
 import ru.klokov.onlineexam.repository.CategoryRepository;
+import ru.klokov.onlineexam.service.impl.CategoryServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

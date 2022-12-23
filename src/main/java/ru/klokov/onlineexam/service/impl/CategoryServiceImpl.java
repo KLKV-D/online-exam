@@ -1,4 +1,4 @@
-package ru.klokov.onlineexam.service;
+package ru.klokov.onlineexam.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -7,6 +7,7 @@ import ru.klokov.onlineexam.exception.ResourceAlreadyExistsException;
 import ru.klokov.onlineexam.exception.ResourceNotFoundException;
 import ru.klokov.onlineexam.model.Category;
 import ru.klokov.onlineexam.repository.CategoryRepository;
+import ru.klokov.onlineexam.service.CategoryService;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryToUpdate.setName(newCategory.getName());
         categoryToUpdate.setDescription(newCategory.getDescription());
-        // TODO set subcategories
+        categoryToUpdate.setSubcategories(newCategory.getSubcategories());
 
         return categoryRepository.save(categoryToUpdate);
     }

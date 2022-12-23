@@ -16,8 +16,4 @@ public class CategoryRequest {
     private String name;
     @Size(max = 1000, message = "Category description length must be less then 1000")
     private String description;
-
-    public CategoryRequest(String name) {
-        this.name = name;
-    }
 }
